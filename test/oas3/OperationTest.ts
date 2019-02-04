@@ -456,15 +456,24 @@ describe('oas3 Operation', function() {
         it('should generate a parameter parser for parameters', function() {
             const operation = makeOperation('get', {
                 responses: {200: {description: "ok"}},
-                parameters: [{
-                    name: 'myparam',
-                    in: 'query',
-                    schema: {type: 'string'}
-                }]
+                parameters: [
+                    {
+                        name: 'myparam',
+                        in: 'query',
+                        schema: {type: 'string'}
+                    },
+                    {
+                        name: 'x-some-custom-header',
+                        in: 'header',
+                        schema: {type: 'string'}
+                    },
+                ]
             });
 
             const result = operation.parseParameters({
-                headers: undefined,
+                headers: {
+                    'X-Some-Custom-Header': 'some-custom-value',
+                },
                 rawPathParams: {},
                 serverParams: undefined,
                 queryString: "myparam=7"
@@ -472,7 +481,9 @@ describe('oas3 Operation', function() {
 
             expect(result).to.eql({
                 query: {myparam: '7'},
-                header: {},
+                header: {
+                    'x-some-custom-header': 'some-custom-value',
+                },
                 server: {},
                 path: {},
                 cookie: {}
