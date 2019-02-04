@@ -8,7 +8,7 @@ import { contentToRequestMediaTypeRegistry } from './oasUtils';
 import RequestMediaType from './RequestMediaType';
 import Oas3CompileContext from './Oas3CompileContext';
 import Parameter from './Parameter';
-import { RawValues, parseParameterGroup, parseQueryParameters } from './parameterParsers';
+import { RawValues, parseParameterGroup, parseQueryParameters, parseHeaderParameters } from './parameterParsers';
 import {
     ParametersMap,
     ParametersByLocation,
@@ -211,7 +211,7 @@ export default class Operation {
 
         return {
             query: parseQueryParameters(this._parameters.query, queryString),
-            header: parseParameterGroup(this._parameters.header, headers || {}),
+            header: parseHeaderParameters(this._parameters.header, headers || {}),
             server: params.serverParams || {},
             path: rawPathParams ? parseParameterGroup(this._parameters.path, rawPathParams) : {},
             cookie: {}

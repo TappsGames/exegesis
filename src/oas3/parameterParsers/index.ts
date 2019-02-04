@@ -188,3 +188,17 @@ export function parseQueryParameters(
     const rawValues = querystring.parse(query || '', '&', '=', {decodeURIComponent: (val: string) => val});
     return _parseParameterGroup(params, rawValues, query || '');
 }
+
+export function parseHeaderParameters(
+    params: {
+        location: ParameterLocation,
+        parser: ParameterParser
+    }[],
+    rawHeaders: RawValues
+) {
+    const rawValues = ld.mapKeys(
+        rawHeaders,
+        (_value: string | string[] | undefined, key: string) => key.toLowerCase()
+    );
+    return _parseParameterGroup(params, rawValues, '');
+}
